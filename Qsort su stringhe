@@ -1,0 +1,27 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+int compare(const void *a, const void *b) {
+	char **a1= (char **) a;
+	char **b1= (char **) b;
+	return (-1)*strcmp(*a1,*b1);
+}
+
+int main()
+{	int i,n;
+	
+	scanf("%d",&n);
+	char ** values = malloc(n*sizeof(char *));
+	for(i=0; i < n; i++) {
+		values[i] = malloc(101*sizeof(char));
+		scanf("%s", values[i]);
+	}
+	qsort(values, n, sizeof(char *), compare);
+
+	for(i=0;i<n;i++) 
+        printf("%s\n",values[i]);
+	
+    free(values);
+	return 0;
+}
