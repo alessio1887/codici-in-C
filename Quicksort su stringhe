@@ -1,0 +1,77 @@
+#include <time.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+int distribuzione_str(char **a, int sx, int px, int dx) { 
+	int i,j;
+  char *temp;
+  char *x;
+	
+  temp=a[dx];
+  a[dx]=a[px];
+  a[px]=temp;//in questo modo ho spostato il pivot in posizione dx, cioe nell'ultima posizone della porzione di array
+
+	x=a[dx]; //x e' il pivot
+	i=sx-1;//indice che separa le stringhe che precedono o sono uguali alla stringa pivot
+  
+	for(j=sx;j<dx;j++)
+	{	if(strcmp(a[j],x)<=0)  
+		{	i++;
+			char *aus;
+			aus=a[j];
+			a[j]=a[i];
+			a[i]=aus;//scambio a[i] con a[j]
+		}	
+	}
+	
+  temp=a[dx]; //scambia_str(a[dx],a[i+1]);
+  a[dx]=a[i+1];
+  a[i+1]=temp;
+
+	return (i+1);
+}
+
+void quicksort(char **a, int sx, int dx )
+{ int perno, pivot;
+  if( sx < dx ) {
+       
+    pivot = sx+rand()%(dx-sx) ;/*scelta del pivot. Sceglie una posizione a caso tra sx e dx inclusi. */
+    
+    perno = distribuzione_str(a, sx, pivot, dx); /* separa le stringhe minori di a[pivot] da quelle maggiori o uguali */
+    /* Ordina ricorsivamente le due metà */
+    quicksort(a, sx, perno-1);
+    quicksort(a, perno+1, dx); 
+  }
+}
+/* Lettura di un array di stringhe da input. Il primo elemento è la lunghezza dell'array */
+char** legge2(int *len)
+{ int i;
+  char **read;
+  scanf("%d", len);
+  if(*len <= 0) return NULL;
+
+  read = (char **) malloc(*len * sizeof(char *));
+  if(read ==NULL) return NULL;
+
+  for( i = 0; i < *len; i++ ) 
+  {   read[i] = (char *) malloc(101* sizeof(char));
+      scanf("%s", read[i]);
+  }																			
+  return read;
+}
+
+int main() {
+  int i, n;
+  char **A;
+
+  A=legge2(&n);
+  if(A!=NULL)
+  {   srand(time(NULL));
+      quicksort(A, 0, n-1);
+  
+      /* Stampa l'array ordinato */
+      for( i = 0; i < n; i++ ) 
+          printf("%s\n", A[i]);
+  }
+  return 0;
+}
